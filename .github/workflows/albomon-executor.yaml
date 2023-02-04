@@ -1,0 +1,12 @@
+name: Albomon Executor
+
+on:
+  push:
+
+jobs:
+  prod-runner-workflow:
+    name: Production runner
+    uses: zerai/albomon-executor/.github/workflows/production-runner.yaml@main
+    secrets: inherit
+    with:
+      triggering-sha: "${{ github.sha }}"
