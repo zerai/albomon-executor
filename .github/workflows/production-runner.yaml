@@ -24,7 +24,7 @@ defaults:
 
 env:
   ALBOMON_REPOSITORY: 'zerai/albomon'
-  ALBOMON_RELEASE: '0.7.1'
+  DEFAULT_ALBOMON_RELEASE: '0.7.1'
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_UNIT_TESTS_COVERAGE: 'Unit-test-coverage-reports-on-SHA'
   UNIT_TEST_CLOVER_FILENAME: 'coverage-unit-test-clover.xml'
@@ -46,11 +46,16 @@ jobs:
         generate-coverage-report: [false]
       fail-fast: true
     steps:
+      - name: Override default albomon release var
+        if: ${{ env.DEFAULT_ALBOMON_RELEASE != inputs.albomonRelease}}
+        id: override-tag-or-release
+        run: echo "DEFAULT_ALBOMON_RELEASE=${{ inputs.albomonRelease }}" >> $GITHUB_ENV
+
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
         uses: actions/checkout@v3
         with:
           repository: ${{ env.ALBOMON_REPOSITORY }}
-          ref: ${{ env.ALBOMON_RELEASE }}
+          ref: ${{ env.DEFAULT_ALBOMON_RELEASE }}
 
 
       - name: Setup PHP
