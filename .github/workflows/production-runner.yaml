@@ -31,7 +31,7 @@ env:
 
 jobs:
   execute-production-albomn:
-    name: Execute Albomn - prod - (php-${{ matrix.php }})
+    name: Execute Albomon - prod - (php-${{ matrix.php }})
     runs-on: ubuntu-22.04
     timeout-minutes: 5
     continue-on-error: ${{ matrix.is-php-experimental }}
