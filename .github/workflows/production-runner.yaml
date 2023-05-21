@@ -65,7 +65,7 @@ jobs:
 
       - name: Application install
         run: |
-          composer install
+          composer install --no-dev
         env:
           APP_ENV: prod
           GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
