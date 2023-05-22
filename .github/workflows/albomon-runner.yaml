@@ -1,12 +1,17 @@
-name: Production Runner
+name: AlboMon Runner
 
 on:
+  schedule: # “At 20:00 on every day.”
+    - cron: "0 12 * * *"
+    #- cron: "*/5 * * * *"
+
   workflow_call:
     # Map the workflow outputs to job outputs
     inputs:
       triggering-sha:
         required: true
         type: string
+
   workflow_dispatch:
     inputs:
       albomonRepository:
@@ -28,32 +33,31 @@ env:
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_APPLICATION_LOG: 'Albomon-application-log'
   APPLICATION_LOG_FILENAME: 'var/log/'
+  #APPLICATION SETTINGS
+  APP_ENV: prod
+  GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
 
 jobs:
-  execute-production-albomn:
-    name: Execute Albomon - prod - (php-${{ matrix.php }})
+  execute-albomon:
+    name: Execute Albomon application
     runs-on: ubuntu-22.04
     timeout-minutes: 5
-    continue-on-error: ${{ matrix.is-php-experimental }}
     strategy:
       matrix:
         php:
           - '8.0'
-        is-php-experimental: [false]
-        generate-coverage-report: [false]
       fail-fast: true
     steps:
       - name: Override default albomon release var
-        if: ${{ env.DEFAULT_ALBOMON_RELEASE != inputs.albomonRelease}}
+        if: ${{ env.DEFAULT_ALBOMON_RELEASE != inputs.albomonRelease && inputs.albomonRelease != '' }}
         id: override-tag-or-release
         run: echo "DEFAULT_ALBOMON_RELEASE=${{ inputs.albomonRelease }}" >> $GITHUB_ENV
 
-      - name: Checkout on SHA-${{ inputs.triggering-sha }}
+      - name: Download AlboMon v.${{ env.DEFAULT_ALBOMON_RELEASE}}
         uses: actions/checkout@v3
         with:
           repository: ${{ env.ALBOMON_REPOSITORY }}
           ref: ${{ env.DEFAULT_ALBOMON_RELEASE }}
-
 
       - name: Setup PHP
         uses: shivammathur/setup-php@2.22.0
@@ -66,30 +70,18 @@ jobs:
       - name: Application install
         run: |
           composer install --no-dev
-        env:
-          APP_ENV: prod
-          GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
 
       - name: Run update catalog
         run: |
           php bin/console albomon:catalog:update --ansi
-        env:
-          APP_ENV: prod
-          GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
 
       - name: Run catalog list
         run: |
           php bin/console albomon:catalog:list --ansi
-        env:
-          APP_ENV: prod
-          GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
 
       - name: Run albomon
         run: |
           php bin/console albomon:check:albopop-catalog --ansi
-        env:
-          APP_ENV: prod
-          GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
 
       - name: Save application log
         uses: actions/upload-artifact@v3
