@@ -16,7 +16,7 @@ on:
       albomonRelease:
         description: 'Release or Tag'
         required: false
-        default: '0.7.1'
+        default: '0.8.2'
 
 defaults:
   run:
@@ -24,7 +24,7 @@ defaults:
 
 env:
   ALBOMON_REPOSITORY: 'zerai/albomon'
-  DEFAULT_ALBOMON_RELEASE: '0.7.1'
+  DEFAULT_ALBOMON_RELEASE: '0.8.2'
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_APPLICATION_LOG: 'Albomon-application-log'
   APPLICATION_LOG_FILENAME: 'var/log/'
