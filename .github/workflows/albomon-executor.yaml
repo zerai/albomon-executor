@@ -1,12 +1,12 @@
-name: Albomon Executor
+name: CI runner
 
 on:
   push:
 
 jobs:
-  prod-runner-workflow:
-    name: Production runner
-    uses: zerai/albomon-executor/.github/workflows/production-runner.yaml@main
+  start-albomon-runner-workflow:
+    name: CI runner
+    uses: zerai/albomon-executor/.github/workflows/albomon-runner.yaml@main
     secrets: inherit
     with:
       triggering-sha: "${{ github.sha }}"
