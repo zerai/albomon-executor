@@ -67,21 +67,23 @@ jobs:
           ini-values: memory_limit=-1
           coverage: pcov
 
-      - name: Application install
+      - name: Install Dependecies
         run: |
           composer install --no-dev
 
-      - name: Run update catalog
+      - name: Run Albomon
         run: |
           php bin/console albomon:catalog:update --ansi
-
-      - name: Run catalog list
-        run: |
           php bin/console albomon:catalog:list --ansi
-
-      - name: Run albomon
-        run: |
           php bin/console albomon:check:albopop-catalog --ansi
+
+#      - name: Run catalog list
+#        run: |
+#          php bin/console albomon:catalog:list --ansi
+#
+#      - name: Run albomon
+#        run: |
+#          php bin/console albomon:check:albopop-catalog --ansi
 
       - name: Save application log
         uses: actions/upload-artifact@v3
