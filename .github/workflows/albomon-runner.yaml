@@ -21,7 +21,7 @@ on:
       albomonRelease:
         description: 'Release or Tag'
         required: false
-        default: '0.8.3'
+        default: '0.8.4'
 
 defaults:
   run:
@@ -29,7 +29,7 @@ defaults:
 
 env:
   ALBOMON_REPOSITORY: 'zerai/albomon'
-  DEFAULT_ALBOMON_RELEASE: '0.8.3'
+  DEFAULT_ALBOMON_RELEASE: '0.8.4'
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_APPLICATION_LOG: 'Albomon-application-log'
   APPLICATION_LOG_FILENAME: 'var/log/'
@@ -97,9 +97,6 @@ jobs:
           path: ${{ env.APPLICATION_LOG_FILENAME }}
 
       - name: Save report
-        #needs: [run-albomon]
-        #if: needs.run-albomon.result == 'success'
-        #if: job.execute-albomon.steps['run-albomon'].result == 'success'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFATC_NAME_FOR_APPLICATION_REPORTS }}
