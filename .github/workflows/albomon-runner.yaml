@@ -33,6 +33,9 @@ env:
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_APPLICATION_LOG: 'Albomon-application-log'
   APPLICATION_LOG_FILENAME: 'var/log/'
+  ARTIFATC_NAME_FOR_APPLICATION_REPORTS: 'Albomon-reports'
+  APPLICATION_REPORT_FILENAME: 'report/'
+
   #APPLICATION SETTINGS
   APP_ENV: prod
   GITHUB_TOKEN: ${{ secrets.GHA_TOKEN_ALBOMON_EXECUTOR }}
@@ -72,6 +75,7 @@ jobs:
           composer install --no-dev
 
       - name: Run Albomon
+        id: run-albomon
         run: |
           php bin/console albomon:catalog:update --ansi
           php bin/console albomon:catalog:list --ansi
@@ -86,7 +90,17 @@ jobs:
 #          php bin/console albomon:check:albopop-catalog --ansi
 
       - name: Save application log
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFATC_NAME_FOR_APPLICATION_LOG }}
           path: ${{ env.APPLICATION_LOG_FILENAME }}
+
+      - name: Save report
+        #needs: [run-albomon]
+        #if: needs.run-albomon.result == 'success'
+        #if: job.execute-albomon.steps['run-albomon'].result == 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ARTIFATC_NAME_FOR_APPLICATION_REPORTS }}
+          path: ${{ env.APPLICATION_REPORT_FILENAME }}
