@@ -21,7 +21,7 @@ on:
       albomonRelease:
         description: 'Release or Tag'
         required: false
-        default: '0.8.4'
+        default: '0.9.0'
 
 defaults:
   run:
@@ -29,7 +29,7 @@ defaults:
 
 env:
   ALBOMON_REPOSITORY: 'zerai/albomon'
-  DEFAULT_ALBOMON_RELEASE: '0.8.4'
+  DEFAULT_ALBOMON_RELEASE: '0.9.0'
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_APPLICATION_LOG: 'Albomon-application-log'
   APPLICATION_LOG_FILENAME: 'var/log/'
@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         php:
-          - '8.0'
+          - '8.1'
       fail-fast: true
     steps:
       - name: Override default albomon release var
