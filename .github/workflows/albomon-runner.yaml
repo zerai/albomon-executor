@@ -21,7 +21,7 @@ on:
       albomonRelease:
         description: 'Release or Tag'
         required: false
-        default: 'v0.9.1'
+        default: 'v0.9.4'
 
 defaults:
   run:
@@ -29,7 +29,7 @@ defaults:
 
 env:
   ALBOMON_REPOSITORY: 'zerai/albomon'
-  DEFAULT_ALBOMON_RELEASE: 'v0.9.1'
+  DEFAULT_ALBOMON_RELEASE: 'v0.9.4'
   # ARTIFACTS SETTINGS
   ARTIFATC_NAME_FOR_APPLICATION_LOG: 'Albomon-application-log'
   APPLICATION_LOG_FILENAME: 'var/log/'
@@ -56,7 +56,7 @@ jobs:
         id: override-tag-or-release
         run: echo "DEFAULT_ALBOMON_RELEASE=${{ inputs.albomonRelease }}" >> $GITHUB_ENV
 
-      - name: Download AlboMon v.${{ env.DEFAULT_ALBOMON_RELEASE}}
+      - name: Download AlboMon ${{ env.DEFAULT_ALBOMON_RELEASE}}
         uses: actions/checkout@v3
         with:
           repository: ${{ env.ALBOMON_REPOSITORY }}
